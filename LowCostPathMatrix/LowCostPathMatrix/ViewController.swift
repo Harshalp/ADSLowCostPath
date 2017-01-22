@@ -16,10 +16,7 @@ class ViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var labelPathCost: UILabel!
     
-    
     @IBOutlet weak var tvLowCostPath: UITextView!
-    
-    let maximumCost = 50
     
     @IBAction func submitAction(_ sender: Any) {
         
@@ -28,11 +25,11 @@ class ViewController: UIViewController, UITextViewDelegate {
         let inputString = self.tvMatrix.text
         if let matrix = Matrix(input: inputString!) {
         
-            let bestPath = matrix.findBestPath()
+            let bestCost = matrix.findBestCost()
+        
+            self.labelPathCost.text = "\(bestCost.gridCostUptoMaximum)"
             
-            self.labelPathCost.text = "\((bestPath.totalCost))"
-            
-            if (bestPath.totalCost)<=maximumCost {
+            if bestCost.traversedCompletePath {
                 
                 self.labelPathSucceeded.text = "Yes"
             }
@@ -40,14 +37,13 @@ class ViewController: UIViewController, UITextViewDelegate {
                 self.labelPathSucceeded.text = "No"
             }
             
-            var pathString = ""
-            for pathIndex in (bestPath.pathArray.reversed()) {
-                
-                pathString.append("\(pathIndex) ")
-            }
+            self.tvLowCostPath.text = String(describing: bestCost.costPathUptoMaximum)
+        }
+        else {
             
-            self.tvLowCostPath.text = pathString
-
+            let alert = UIAlertController(title: "Error", message: "Invalid Matrix", preferredStyle:.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     

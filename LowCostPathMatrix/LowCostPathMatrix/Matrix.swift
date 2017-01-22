@@ -6,32 +6,50 @@
 //  Copyright © 2017 Harshal Pandhe. All rights reserved.
 //
 
+
+//The class with hold input matrix entered by user and operations on that matrix
+
 import Foundation
 
 class Matrix {
     
-    var  matrix : [[Int]] = []
+    //inputMatrix will hold the matrix enter by user
+    var inputMatrix: [[Cost]] = []
     
+    //Total number of rows and columns
     var rows: Int
     var columns: Int
     
-    var paths = Array<BestPath>()
-    var tempPaths = Array<BestPath>()
+    //It will hold the calculated cost for each row
+    var additionColumn = Array<Cost>()
+    
+    //Maximum allowed cost. Path traversing should stop if cost exeeds 50.
+    let maximumCost = 50
     
     
+    //MARK:- Initialization
     init?(input : String) {
         
+        //Validates blank input
+        if input == "" {
+            return nil
+        }
+    
+        //Calculate number of rows and columns
         let rowArray = input.components(separatedBy: "\n")
         self.rows = rowArray.count
         var columnArray = rowArray[0].components(separatedBy: ",")
         self.columns = columnArray.count
         
-        matrix = Array(repeating: Array(repeating: 0, count: self.columns), count: self.rows)
+        //Initialize input matrix
+        self.inputMatrix = Array(repeating: Array(repeating: Cost(cost: Int(0), gridRow: 0), count: self.columns), count: self.rows)
         
+        //Fill the input matrix with input data
         for i in 0..<self.rows {
             
             columnArray = rowArray[i].components(separatedBy: ",")
             
+            //Condition to check all the rows contains same number of columns
             if columnArray.count != self.columns {
                 
                 return nil
@@ -39,142 +57,208 @@ class Matrix {
             
             for j in 0..<self.columns {
                 
-                let value = columnArray[j].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+                //This will check whether input contains only integer value
+                if let value = Int(columnArray[j].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)) {
                 
-                matrix[i][j] = Int(value)!
+                    let cost = Cost(cost: value, gridRow: i+1)
+                
+                    if value < maximumCost {
+                        cost.gridCostUptoMaximum = value
+                        cost.costPathUptoMaximum.append(i+1)
+                    }
+                    self.inputMatrix[i][j] = cost
+                }
+                else {
+                    
+                    return nil
+                }
             }
         }
-        
-        print(matrix)
     }
     
-    func findBestPath() -> BestPath {
+    //MARK:- This will return the best path object which contains the minimum cost and path
+    func findBestCost() -> Cost {
         
+        //Clear additionColumn array incase it has previously stored data
+        self.additionColumn.removeAll()
+        
+        //Initialize additionColumn array with first column of matrix. This array will hold the additions of the costs from different columns along with the path.
         for i in 0..<self.rows {
             
-            let costValue = self.matrix[i][self.columns-1]
-            let path = BestPath(cost: costValue, arrayElement: i)
-            
-            self.paths.append(path)
+            let cost = self.inputMatrix[i][0]
+            self.additionColumn.append(cost)
         }
         
-        calculateBestPath()
+        if self.columns > 1 {
         
-        var minCostPath:BestPath!
-        
-        for currentPath in self.paths {
-            
-            if minCostPath != nil {
+            //Below logic will add adjucent minimum cost number of particular column and store it into additionColumn array.
+            for column in 1...self.columns-1 {
                 
-                if(minCostPath.totalCost > currentPath.totalCost) {
-                    minCostPath = currentPath
-                }
-            }
-            else {
-                minCostPath = currentPath
-            }
-        }
-        
-        return minCostPath
-    }
-    
-    func calculateBestPath() {
-        
-        for col in (0...self.columns-2).reversed() {
-            
-            for row in 0...self.rows-1 {
-            
-                var topRow: Int
-                var bottomRow: Int
-             
-                if row == 0 {
+                //tempColumn will hold additions of two adjucent numbers temporarily.
+                var tempColumn = Array<Cost>()
+                
+                for row in 0...self.rows-1 {
                     
-                    topRow = self.rows-1
-                }
-                else {
-                    topRow = row-1
-                }
-                
-                if row == self.rows-1 {
+                    var topAdjacent:Int
+                    let middleAdjacent = row
+                    var bottomAdjacent:Int
                     
-                    bottomRow = 0
-                }
-                else {
-                    bottomRow = row+1
+                    if row == 0 {
+                        
+                        topAdjacent = self.rows-1
+                    }
+                    else {
+                        topAdjacent = row-1
+                    }
+                    
+                    if row == self.rows-1 {
+                        
+                        bottomAdjacent = 0
+                    }
+                    else {
+                        bottomAdjacent = row+1
+                    }
+                    
+                    //Get the minimum cost object
+                    let minCost = minimumCost(adjacantRows: [topAdjacent, middleAdjacent, bottomAdjacent], matrixElement: self.inputMatrix[row][column])
+                    
+                    //If cost of the grid less than 50 and complete column is traversed then set traversedCompletePath.
+                    if minCost.gridCost < self.maximumCost && column == self.columns-1 {
+                        
+                        minCost.traversedCompletePath = true
+                    }
+                    
+                    tempColumn.append(minCost)
                 }
                 
-                minimumCost(rowArray: [topRow, row, bottomRow], matrixElement: self.matrix[row][col], currentRow: row)
-            }
-            
-            for row in 0...self.rows-1 {
-            
-                let bestPath = paths[row]
-                let bestPathTemp = tempPaths[row]
+                //If tempColumn doesn't contain anything then break the loop
+                if tempColumn.count <= 0 { break }
                 
-                bestPath.totalCost = bestPathTemp.totalCost
-                bestPath.pathArray.append(contentsOf: bestPathTemp.pathArray)
+                self.additionColumn.removeAll()
+                self.additionColumn.append(contentsOf: tempColumn)
+                tempColumn.removeAll()
             }
-            
-            tempPaths.removeAll()
         }
         
-        
+        //Find minimum cost object in additionCost array
+        var minCost:Cost!
         for row in 0...self.rows-1 {
             
-            let bestPath = paths[row]
-            let rowNo = bestPath.pathArray[0]
-            bestPath.pathArray.remove(at: 0)
-            bestPath.pathArray.append(rowNo)
-        }
-        
-        print("Paths:")
-        for bestPath in paths {
+            let additionCost = self.additionColumn[row]
             
-            print("bestPath.totalCost:\(bestPath.totalCost)")
-            print("bestPath.pathArray:")
-            
-            for pathIndex in bestPath.pathArray.reversed() {
+            if minCost == nil {
+             
+                minCost = additionCost
+            }
+            else if minCost.gridCost > additionCost.gridCost {
                 
-                print(pathIndex)
+                minCost = additionCost
+            }
+            
+            if minCost.costPath.elementsEqual(minCost.costPathUptoMaximum) {
+             
+                minCost.traversedCompletePath = true
             }
         }
+        
+        return minCost
     }
     
     
-    func minimumCost(rowArray: Array<Int>, matrixElement:Int, currentRow:Int) {
+    //MARK:- It will search and return minimum cost
+    func minimumCost(adjacantRows: Array<Int>, matrixElement:Cost) -> Cost {
         
-        let topCost = matrixElement + paths[rowArray[0]].totalCost
-        let adjCost = matrixElement + paths[rowArray[1]].totalCost
-        let bottomCost = matrixElement + paths[rowArray[2]].totalCost
+        let topCost = self.additionColumn[adjacantRows[0]] as Cost
+        let topAdjCostTotal = matrixElement.gridCost + topCost.gridCost
         
-        var path:BestPath
+        let midCost = self.additionColumn[adjacantRows[1]] as Cost
+        let midAdjCostTotal = matrixElement.gridCost + midCost.gridCost
         
-        if topCost <= adjCost  {
+        let btmCost = self.additionColumn[adjacantRows[2]] as Cost
+        let btmAdjCostTotal = matrixElement.gridCost + btmCost.gridCost
+        
+        var cost:Cost
+        
+        if topAdjCostTotal <= midAdjCostTotal  {
             
-            if topCost <= bottomCost {
+            if topAdjCostTotal <= btmAdjCostTotal {
                 
-                path = BestPath(cost: topCost, arrayElement: rowArray[0])
+                var pathArray = Array<Int>()
+                pathArray.append(contentsOf: topCost.costPath)
+                pathArray.append(adjacantRows[1]+1)
+                
+                cost = Cost(cost: topAdjCostTotal, gridRows:pathArray)
+                
+                if topAdjCostTotal < self.maximumCost {
+                
+                    cost.costPathUptoMaximum.append(contentsOf: pathArray)
+                    cost.gridCostUptoMaximum = topAdjCostTotal
+                }
+                else {
+                    
+                    cost.costPathUptoMaximum = topCost.costPathUptoMaximum
+                    cost.gridCostUptoMaximum = topCost.gridCostUptoMaximum
+                }
             }
             else {
-                path = BestPath(cost: bottomCost, arrayElement: rowArray[2])
+                
+                var pathArray = Array<Int>()
+                pathArray.append(contentsOf: btmCost.costPath)
+                pathArray.append(adjacantRows[1]+1)
+                
+                cost = Cost(cost: btmAdjCostTotal, gridRows: pathArray)
+                
+                if btmAdjCostTotal < self.maximumCost {
+                    
+                    cost.costPathUptoMaximum.append(contentsOf: pathArray)
+                    cost.gridCostUptoMaximum = btmAdjCostTotal
+                }
+                else {
+                    cost.costPathUptoMaximum = btmCost.costPathUptoMaximum
+                    cost.gridCostUptoMaximum = btmCost.gridCostUptoMaximum
+                }
             }
         }
         else {
-         
-            if adjCost <= bottomCost {
+            
+            if midAdjCostTotal <= btmAdjCostTotal {
                 
-                path = BestPath(cost: adjCost, arrayElement: rowArray[1])
+                var pathArray = Array<Int>()
+                pathArray.append(contentsOf: midCost.costPath)
+                pathArray.append(adjacantRows[1]+1)
                 
+                cost = Cost(cost: midAdjCostTotal, gridRows: pathArray)
+                
+                if midAdjCostTotal < self.maximumCost {
+                    
+                    cost.costPathUptoMaximum.append(contentsOf: pathArray)
+                    cost.gridCostUptoMaximum = midAdjCostTotal
+                }
+                else {
+                    cost.costPathUptoMaximum = midCost.costPathUptoMaximum
+                    cost.gridCostUptoMaximum = midCost.gridCostUptoMaximum
+                }
             }
             else {
-                path = BestPath(cost: bottomCost, arrayElement: rowArray[2])
+             
+                var pathArray = Array<Int>()
+                pathArray.append(contentsOf: btmCost.costPath)
+                pathArray.append(adjacantRows[1]+1)
+                
+                cost = Cost(cost: btmAdjCostTotal, gridRows: pathArray)
+                
+                if btmAdjCostTotal < self.maximumCost {
+                    
+                    cost.costPathUptoMaximum.append(contentsOf: pathArray)
+                    cost.gridCostUptoMaximum = btmAdjCostTotal
+                }
+                else {
+                    cost.costPathUptoMaximum = btmCost.costPathUptoMaximum
+                    cost.gridCostUptoMaximum = btmCost.gridCostUptoMaximum
+                }
             }
         }
         
-        self.tempPaths.append(path)
+        return cost
     }
-    
-    
-
-    
 }
