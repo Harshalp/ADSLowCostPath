@@ -16,14 +16,38 @@ class ViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var labelPathCost: UILabel!
     
-    @IBOutlet weak var tvLowCostPath: UITextView!
+    @IBOutlet weak var labelPathTraversed: UILabel!
+    
+    @IBOutlet weak var labelExample: UILabel!
+    
+    
+    func resetView() {
+     
+        self.tvMatrix.resignFirstResponder()
+        
+        self.labelExample.text = " Expected Input:\n 5,4,1,2,8,6\n 6,1,8,2,7,4\n 5,9,3,9,1,5\n 8,1,1,3,2,6\n 3,7,2,1,2,3"
+        
+        self.tvMatrix.text = ""
+        self.tvMatrix.alpha = 0.05
+        
+        self.labelPathSucceeded.text = "Traverse Completed"
+        self.labelPathCost.text = "Cost"
+        self.labelPathTraversed.text = "Path"
+    }
+    
+    //MARK:- Button Actions
+    @IBAction func clearAction(_ sender: UIButton) {
+        
+        resetView()
+    }
     
     @IBAction func submitAction(_ sender: Any) {
         
+        
         self.tvMatrix.resignFirstResponder()
         
-        let inputString = self.tvMatrix.text
-        if let matrix = Matrix(input: inputString!) {
+        let inputString = self.tvMatrix.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        if let matrix = Matrix(input: inputString) {
         
             let bestCost = matrix.findBestCost()
         
@@ -37,7 +61,11 @@ class ViewController: UIViewController, UITextViewDelegate {
                 self.labelPathSucceeded.text = "No"
             }
             
-            self.tvLowCostPath.text = String(describing: bestCost.costPathUptoMaximum)
+            var pathString = String(describing: bestCost.costPathUptoMaximum)
+            pathString = pathString.replacingOccurrences(of: "[", with: "")
+            pathString = pathString.replacingOccurrences(of: "]", with: "")
+            
+            self.labelPathTraversed.text = pathString
         }
         else {
             
@@ -52,7 +80,10 @@ class ViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.tvMatrix.text = "5,4,1,2,8,6\n6,1,8,2,7,4\n5,9,3,9,1,5\n8,1,1,3,2,6\n3,7,2,1,2,3"
+        self.automaticallyAdjustsScrollViewInsets = false
+        
+        self.view.bringSubview(toFront: self.tvMatrix)
+        resetView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,15 +93,9 @@ class ViewController: UIViewController, UITextViewDelegate {
 
     public func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         
-        if textView.isEqual(self.tvMatrix) {
-            
-            self.tvMatrix.text = ""
-            
-            return true
-        }
+        self.tvMatrix.alpha = 1.0
         
-        return false
+        return true
     }
-
 }
 

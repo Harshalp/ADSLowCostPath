@@ -6,6 +6,8 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,7 +23,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="bcx-yI-CDo">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.050000000000000003" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bcx-yI-CDo">
                                 <rect key="frame" x="87" y="84" width="200" height="200"/>
                                 <color key="backgroundColor" red="0.86315851560000001" green="0.86315851560000001" blue="0.86315851560000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -29,7 +31,7 @@
                                     <constraint firstAttribute="height" constant="200" id="MJI-le-WR9"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="numberPad"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation"/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="6Cc-7s-i1D"/>
                                 </connections>
@@ -43,7 +45,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cost &lt; 50" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jTJ-GQ-UYZ">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Traverse Completed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jTJ-GQ-UYZ">
                                 <rect key="frame" x="87" y="378.5" width="200" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="hoc-2j-rOq"/>
@@ -61,18 +63,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Path" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="EO7-5Z-lE8">
-                                <rect key="frame" x="87" y="450.5" width="200" height="80"/>
-                                <color key="backgroundColor" red="0.86315851556468126" green="0.86315851556468126" blue="0.86315851556468126" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="LzS-SU-xTt"/>
-                                    <constraint firstAttribute="height" constant="80" id="Wg9-gS-Aft"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ky-JP-pk1">
-                                <rect key="frame" x="147.5" y="292" width="80" height="30"/>
+                                <rect key="frame" x="97.5" y="292" width="80" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="Vch-Bf-80p"/>
                                     <constraint firstAttribute="height" constant="30" id="fVQ-hl-UuR"/>
@@ -82,28 +74,57 @@
                                     <action selector="submitAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qt8-0g-L69"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Path" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XLQ-pP-upA">
+                                <rect key="frame" x="31" y="455" width="313" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Expected Input:" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gjn-rc-p3f">
+                                <rect key="frame" x="87" y="84" width="200" height="200"/>
+                                <color key="backgroundColor" red="0.86315851560000001" green="0.86315851560000001" blue="0.86315851560000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                                <color key="textColor" red="0.39536405456852797" green="0.39536405456852797" blue="0.39536405456852797" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nnr-Gu-Tww">
+                                <rect key="frame" x="197.5" y="292" width="80" height="30"/>
+                                <state key="normal" title="Clear"/>
+                                <connections>
+                                    <action selector="clearAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NE0-BR-u6B"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="EO7-5Z-lE8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2xW-pN-QmD"/>
+                            <constraint firstItem="nnr-Gu-Tww" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="10" id="1Cc-Jq-TlO"/>
                             <constraint firstItem="bcx-yI-CDo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="4qN-ke-m4z"/>
+                            <constraint firstItem="XLQ-pP-upA" firstAttribute="top" secondItem="iD9-ed-XWC" secondAttribute="bottom" constant="19.5" id="5iY-mM-fU5"/>
                             <constraint firstItem="Eh5-9l-e3a" firstAttribute="top" secondItem="7Ky-JP-pk1" secondAttribute="bottom" constant="15" id="7UB-BM-g7W"/>
+                            <constraint firstItem="XLQ-pP-upA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="15" id="ADj-GP-Xcv"/>
+                            <constraint firstItem="nnr-Gu-Tww" firstAttribute="top" secondItem="7Ky-JP-pk1" secondAttribute="top" id="B4y-QB-lCt"/>
                             <constraint firstItem="7Ky-JP-pk1" firstAttribute="top" secondItem="bcx-yI-CDo" secondAttribute="bottom" constant="8" id="GrL-hb-pcz"/>
                             <constraint firstItem="Eh5-9l-e3a" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ko2-Rt-q3l"/>
+                            <constraint firstItem="gjn-rc-p3f" firstAttribute="width" secondItem="bcx-yI-CDo" secondAttribute="width" id="LMU-3p-sE4"/>
                             <constraint firstItem="iD9-ed-XWC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Pif-Jt-4pZ"/>
+                            <constraint firstItem="gjn-rc-p3f" firstAttribute="top" secondItem="bcx-yI-CDo" secondAttribute="top" id="TG7-pU-zEu"/>
                             <constraint firstItem="jTJ-GQ-UYZ" firstAttribute="top" secondItem="Eh5-9l-e3a" secondAttribute="bottom" constant="15" id="X9n-j3-bQh"/>
-                            <constraint firstItem="7Ky-JP-pk1" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="aJ4-Kq-Dtm"/>
-                            <constraint firstItem="EO7-5Z-lE8" firstAttribute="top" secondItem="iD9-ed-XWC" secondAttribute="bottom" constant="15" id="lFS-jZ-ldk"/>
+                            <constraint firstItem="nnr-Gu-Tww" firstAttribute="width" secondItem="7Ky-JP-pk1" secondAttribute="width" id="fIs-ct-BEl"/>
+                            <constraint firstItem="gjn-rc-p3f" firstAttribute="height" secondItem="bcx-yI-CDo" secondAttribute="height" id="ic8-NW-U09"/>
+                            <constraint firstItem="gjn-rc-p3f" firstAttribute="leading" secondItem="bcx-yI-CDo" secondAttribute="leading" id="m5C-8h-uy7"/>
                             <constraint firstItem="bcx-yI-CDo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qjA-gv-HGN"/>
                             <constraint firstItem="iD9-ed-XWC" firstAttribute="top" secondItem="jTJ-GQ-UYZ" secondAttribute="bottom" constant="15" id="s6b-nr-1Ss"/>
                             <constraint firstItem="jTJ-GQ-UYZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tFV-gS-fZ7"/>
+                            <constraint firstItem="7Ky-JP-pk1" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="centerX" constant="-10" id="yaj-1b-lgd"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="XLQ-pP-upA" secondAttribute="trailing" constant="15" id="zup-AD-ZoW"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Path of Lowest Cost" id="GFc-KS-k0V"/>
                     <connections>
+                        <outlet property="labelExample" destination="gjn-rc-p3f" id="IJO-Mz-N6K"/>
                         <outlet property="labelPathCost" destination="iD9-ed-XWC" id="Iv7-un-IMt"/>
                         <outlet property="labelPathSucceeded" destination="jTJ-GQ-UYZ" id="apS-2P-vEd"/>
-                        <outlet property="tvLowCostPath" destination="EO7-5Z-lE8" id="SUI-r9-w4e"/>
+                        <outlet property="labelPathTraversed" destination="XLQ-pP-upA" id="Xg6-wA-Vdx"/>
                         <outlet property="tvMatrix" destination="bcx-yI-CDo" id="Bbq-UT-nS2"/>
                     </connections>
                 </viewController>
