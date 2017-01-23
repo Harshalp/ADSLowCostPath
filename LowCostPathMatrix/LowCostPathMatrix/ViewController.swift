@@ -20,7 +20,7 @@ class ViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var labelExample: UILabel!
     
-    
+    //This will reset all labels and textview
     func resetView() {
      
         self.tvMatrix.resignFirstResponder()
@@ -43,14 +43,14 @@ class ViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func submitAction(_ sender: Any) {
         
-        
         self.tvMatrix.resignFirstResponder()
         
         let inputString = self.tvMatrix.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         if let matrix = Matrix(input: inputString) {
         
-            let bestCost = matrix.findBestCost()
-        
+            let lowCostAlgo = LowCostFinder()
+            let bestCost = lowCostAlgo.findBestCostForMatrix(matrix: matrix.inputMatrix)
+            
             self.labelPathCost.text = "\(bestCost.gridCostUptoMaximum)"
             
             if bestCost.traversedCompletePath {
@@ -75,7 +75,6 @@ class ViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -84,11 +83,6 @@ class ViewController: UIViewController, UITextViewDelegate {
         
         self.view.bringSubview(toFront: self.tvMatrix)
         resetView()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     public func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {

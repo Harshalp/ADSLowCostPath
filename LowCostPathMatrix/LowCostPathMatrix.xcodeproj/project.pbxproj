@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		12ABCFE31E32AE9C0067AEF3 /* Cost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12ABCFE21E32AE9C0067AEF3 /* Cost.swift */; };
+		12ABD1C41E3669E50067AEF3 /* LowCostFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12ABD1C31E3669E50067AEF3 /* LowCostFinder.swift */; };
 		12EC84A61E2FC6FE00B68E7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EC84A51E2FC6FE00B68E7F /* AppDelegate.swift */; };
 		12EC84A81E2FC6FE00B68E7F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EC84A71E2FC6FE00B68E7F /* ViewController.swift */; };
 		12EC84AB1E2FC6FE00B68E7F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12EC84A91E2FC6FE00B68E7F /* Main.storyboard */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		12ABCFE21E32AE9C0067AEF3 /* Cost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cost.swift; sourceTree = "<group>"; };
+		12ABD1C31E3669E50067AEF3 /* LowCostFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LowCostFinder.swift; sourceTree = "<group>"; };
 		12EC84A21E2FC6FE00B68E7F /* LowCostPathMatrix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LowCostPathMatrix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12EC84A51E2FC6FE00B68E7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12EC84A71E2FC6FE00B68E7F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +80,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		12ABD1C21E3668CB0067AEF3 /* LowCostAlgorithm */ = {
+			isa = PBXGroup;
+			children = (
+				12ABD1C31E3669E50067AEF3 /* LowCostFinder.swift */,
+			);
+			name = LowCostAlgorithm;
+			sourceTree = "<group>";
+		};
 		12EC84991E2FC6FD00B68E7F = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +111,7 @@
 		12EC84A41E2FC6FE00B68E7F /* LowCostPathMatrix */ = {
 			isa = PBXGroup;
 			children = (
+				12ABD1C21E3668CB0067AEF3 /* LowCostAlgorithm */,
 				12EC84D41E2FD2F500B68E7F /* Model */,
 				12EC84D31E2FD2E800B68E7F /* Controller */,
 				12EC84A51E2FC6FE00B68E7F /* AppDelegate.swift */,
@@ -284,6 +295,7 @@
 				12EC84A81E2FC6FE00B68E7F /* ViewController.swift in Sources */,
 				12EC84A61E2FC6FE00B68E7F /* AppDelegate.swift in Sources */,
 				12ABCFE31E32AE9C0067AEF3 /* Cost.swift in Sources */,
+				12ABD1C41E3669E50067AEF3 /* LowCostFinder.swift in Sources */,
 				12EC84D61E2FEDCE00B68E7F /* Matrix.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
