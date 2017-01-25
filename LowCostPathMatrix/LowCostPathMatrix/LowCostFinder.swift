@@ -23,8 +23,9 @@ class LowCostFinder: NSObject {
     //inputMatrix will hold the matrix enter by user
     var inputMatrix: [[Cost]] = []
     
-    //MARK:- This will return the best path object which contains the minimum cost and path
-    func findBestCostForMatrix(matrix: [[Cost]]) -> Cost {
+    
+    //Mark:- Initialize additionColumns array
+    func initializeArrays(matrix:[[Cost]]) {
         
         self.inputMatrix = matrix
         self.rows = self.inputMatrix.count
@@ -39,6 +40,13 @@ class LowCostFinder: NSObject {
             let cost = self.inputMatrix[i][0]
             self.additionColumn.append(cost)
         }
+    }
+    
+    
+    //MARK:- This will return the best path object which contains the minimum cost and path
+    func findBestCostFor(matrix: [[Cost]]) -> Cost {
+        
+        initializeArrays(matrix: matrix)
         
         if self.columns > 1 {
             
@@ -50,39 +58,38 @@ class LowCostFinder: NSObject {
                 
                 for row in 0...self.rows-1 {
                     
-                    var topAdjacent:Int
-                    let middleAdjacent = row
-                    var bottomAdjacent:Int
+                    let currentCost = self.inputMatrix[row][column]
                     
-                    if row == 0 {
+                    //Get the adjacent rows
+                    let (topAdjacent,bottomAdjacent) = getAdjacentRows(row: row, totalRows: self.rows)
+                    
+                    //Get the minimum cost grid adjacent to current grid
+                    let minCost = min(self.additionColumn[topAdjacent],self.additionColumn[row],self.additionColumn[bottomAdjacent])
+                    
+                    let totalMinValue = minCost.gridCost + currentCost.gridCost
+                    
+                    var pathArray = Array<Int>()
+                    pathArray.append(contentsOf: minCost.costPath)
+                    pathArray.append(row+1)
+                    
+                    //Create a Cost object with minimum cost and attach path traversed to reach it.
+                    let totalCost = Cost(cost: totalMinValue, gridRows:pathArray)
+                    
+                    if totalMinValue < self.maximumCost {
                         
-                        topAdjacent = self.rows-1
+                        totalCost.costPathUptoMaximum.append(contentsOf: pathArray)
+                        totalCost.gridCostUptoMaximum = totalMinValue
                     }
                     else {
-                        topAdjacent = row-1
-                    }
-                    
-                    if row == self.rows-1 {
                         
-                        bottomAdjacent = 0
-                    }
-                    else {
-                        bottomAdjacent = row+1
+                        totalCost.costPathUptoMaximum = minCost.costPathUptoMaximum
+                        totalCost.gridCostUptoMaximum = minCost.gridCostUptoMaximum
                     }
                     
-                    //Get the minimum cost object
-                    let minCost = minimumCost(adjacantRows: [topAdjacent, middleAdjacent, bottomAdjacent], matrixElement: self.inputMatrix[row][column])
-                    
-                    //If cost of the grid less than 50 and complete column is traversed then set traversedCompletePath.
-                    if minCost.gridCost < self.maximumCost && column == self.columns-1 {
-                        
-                        minCost.traversedCompletePath = true
-                    }
-                    
-                    tempColumn.append(minCost)
+                    tempColumn.append(totalCost)
                 }
                 
-                //If tempColumn doesn't contain anything then break the loop
+                //If tempColumn doesn't contain anything then break the loop and do not update the additionColumn
                 if tempColumn.count <= 0 { break }
                 
                 self.additionColumn.removeAll()
@@ -91,17 +98,26 @@ class LowCostFinder: NSObject {
             }
         }
         
+        //Get the minimum cost from additionColumn
+        let minCost = searchLowCostIn(costs: additionColumn)
+        
+        return minCost
+    }
+    
+    
+    //Mark:- Searchs for lowest cost from the provided costs
+    func searchLowCostIn(costs: [Cost]) -> Cost {
+        
         //Find minimum cost object in additionCost array
         var minCost:Cost!
-        for row in 0...self.rows-1 {
-            
-            let additionCost = self.additionColumn[row]
+        
+        for additionCost in costs {
             
             if minCost == nil {
                 
                 minCost = additionCost
             }
-            else if minCost.gridCost > additionCost.gridCost {
+            else if minCost > additionCost {
                 
                 minCost = additionCost
             }
@@ -116,106 +132,29 @@ class LowCostFinder: NSObject {
     }
     
     
-    //MARK:- It will search and return minimum cost
-    func minimumCost(adjacantRows: Array<Int>, matrixElement:Cost) -> Cost {
+    //Mark:- It calculates and returns the adjucent rows to provided row
+    func getAdjacentRows(row:Int, totalRows:Int) -> (Int, Int) {
         
-        //Calculate the cost of adjucant grids
-        let topCost = self.additionColumn[adjacantRows[0]] as Cost
-        let topAdjCostTotal = matrixElement.gridCost + topCost.gridCost
+        var topAdjacent:Int
+        var bottomAdjacent:Int
         
-        let midCost = self.additionColumn[adjacantRows[1]] as Cost
-        let midAdjCostTotal = matrixElement.gridCost + midCost.gridCost
-        
-        let btmCost = self.additionColumn[adjacantRows[2]] as Cost
-        let btmAdjCostTotal = matrixElement.gridCost + btmCost.gridCost
-        
-        var cost:Cost
-        
-        //Cost comparison
-        if topAdjCostTotal <= midAdjCostTotal  {
+        //Calculate top and bottom rows
+        if row == 0 {
             
-            if topAdjCostTotal <= btmAdjCostTotal {
-                
-                var pathArray = Array<Int>()
-                pathArray.append(contentsOf: topCost.costPath)
-                pathArray.append(adjacantRows[1]+1)
-                
-                //Create a Cost object with minimum cost and attach path traversed to reach it.
-                cost = Cost(cost: topAdjCostTotal, gridRows:pathArray)
-                
-                if topAdjCostTotal < self.maximumCost {
-                    
-                    cost.costPathUptoMaximum.append(contentsOf: pathArray)
-                    cost.gridCostUptoMaximum = topAdjCostTotal
-                }
-                else {
-                    
-                    cost.costPathUptoMaximum = topCost.costPathUptoMaximum
-                    cost.gridCostUptoMaximum = topCost.gridCostUptoMaximum
-                }
-            }
-            else {
-                
-                var pathArray = Array<Int>()
-                pathArray.append(contentsOf: btmCost.costPath)
-                pathArray.append(adjacantRows[1]+1)
-                
-                //Create a Cost object with minimum cost and attach path traversed to reach it.
-                cost = Cost(cost: btmAdjCostTotal, gridRows: pathArray)
-                
-                if btmAdjCostTotal < self.maximumCost {
-                    
-                    cost.costPathUptoMaximum.append(contentsOf: pathArray)
-                    cost.gridCostUptoMaximum = btmAdjCostTotal
-                }
-                else {
-                    cost.costPathUptoMaximum = btmCost.costPathUptoMaximum
-                    cost.gridCostUptoMaximum = btmCost.gridCostUptoMaximum
-                }
-            }
+            topAdjacent = totalRows-1
         }
         else {
-            
-            if midAdjCostTotal <= btmAdjCostTotal {
-                
-                var pathArray = Array<Int>()
-                pathArray.append(contentsOf: midCost.costPath)
-                pathArray.append(adjacantRows[1]+1)
-                
-                //Create a Cost object with minimum cost and attach path traversed to reach it.
-                cost = Cost(cost: midAdjCostTotal, gridRows: pathArray)
-                
-                if midAdjCostTotal < self.maximumCost {
-                    
-                    cost.costPathUptoMaximum.append(contentsOf: pathArray)
-                    cost.gridCostUptoMaximum = midAdjCostTotal
-                }
-                else {
-                    cost.costPathUptoMaximum = midCost.costPathUptoMaximum
-                    cost.gridCostUptoMaximum = midCost.gridCostUptoMaximum
-                }
-            }
-            else {
-                
-                var pathArray = Array<Int>()
-                pathArray.append(contentsOf: btmCost.costPath)
-                pathArray.append(adjacantRows[1]+1)
-                
-                //Create a Cost object with minimum cost and attach path traversed to reach it.
-                cost = Cost(cost: btmAdjCostTotal, gridRows: pathArray)
-                
-                if btmAdjCostTotal < self.maximumCost {
-                    
-                    cost.costPathUptoMaximum.append(contentsOf: pathArray)
-                    cost.gridCostUptoMaximum = btmAdjCostTotal
-                }
-                else {
-                    cost.costPathUptoMaximum = btmCost.costPathUptoMaximum
-                    cost.gridCostUptoMaximum = btmCost.gridCostUptoMaximum
-                }
-            }
+            topAdjacent = row-1
         }
         
-        return cost
+        if row == totalRows-1 {
+            
+            bottomAdjacent = 0
+        }
+        else {
+            bottomAdjacent = row+1
+        }
+        
+        return (topAdjacent, bottomAdjacent)
     }
 }

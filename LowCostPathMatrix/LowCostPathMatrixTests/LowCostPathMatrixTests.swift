@@ -30,7 +30,7 @@ class LowCostPathMatrixTests: XCTestCase {
         XCTAssertNotNil(matrix)
         
         let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostForMatrix(matrix: (matrix?.inputMatrix)!)
+        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
         
         XCTAssertTrue(minCost.traversedCompletePath)
         XCTAssertEqual(16, minCost.gridCostUptoMaximum)
@@ -46,7 +46,7 @@ class LowCostPathMatrixTests: XCTestCase {
         XCTAssertNotNil(matrix)
         
         let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostForMatrix(matrix: (matrix?.inputMatrix)!)
+        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
         
         XCTAssertTrue(minCost.traversedCompletePath)
         XCTAssertEqual(18, minCost.gridCostUptoMaximum)
@@ -63,7 +63,7 @@ class LowCostPathMatrixTests: XCTestCase {
         XCTAssertNotNil(matrix)
         
         let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostForMatrix(matrix: (matrix?.inputMatrix)!)
+        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
         
         XCTAssertTrue(minCost.traversedCompletePath)
         XCTAssertEqual(1, minCost.gridCostUptoMaximum)
@@ -80,7 +80,7 @@ class LowCostPathMatrixTests: XCTestCase {
         XCTAssertNotNil(matrix)
         
         let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostForMatrix(matrix: (matrix?.inputMatrix)!)
+        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
         
         XCTAssertFalse(minCost.traversedCompletePath)
         XCTAssertEqual(48, minCost.gridCostUptoMaximum)
@@ -96,7 +96,7 @@ class LowCostPathMatrixTests: XCTestCase {
         XCTAssertNotNil(matrix)
         
         let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostForMatrix(matrix: (matrix?.inputMatrix)!)
+        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
         
         XCTAssertFalse(minCost.traversedCompletePath)
         XCTAssertEqual(0, minCost.gridCostUptoMaximum)
@@ -143,32 +143,35 @@ class LowCostPathMatrixTests: XCTestCase {
         XCTAssertNotNil(matrix)
         
         let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostForMatrix(matrix:(matrix?.inputMatrix)!)
+        let minCost = lowCostAlgo.findBestCostFor(matrix:(matrix?.inputMatrix)!)
         
         XCTAssertTrue(minCost.traversedCompletePath)
         XCTAssertEqual(1, minCost.gridCostUptoMaximum)
         XCTAssertEqual([2,3,4,1], minCost.costPathUptoMaximum)
     }
     
-    //MARK:- Test Case for Negative numbers in matrix
-    func testMinimumCostMethod() {
+    //MARK:- Test case for adjacent rows
+    func testGetAdjacentRowsMethod() {
+     
+        let lowCostAlgo = LowCostFinder()
+        let (topAdjacent,bottomAdjacent) = lowCostAlgo.getAdjacentRows(row: 0, totalRows: 3)
+        
+        XCTAssertEqual(2, topAdjacent)
+        XCTAssertEqual(1, bottomAdjacent)
+    }
+    
+    //MARK:- Test low cost method which returns lowest cost from array
+    func testSearchLowCostInMethod() {
         
         let matrixString = "3,4,1,2,8,6\n6,1,8,2,7,4\n5,9,3,9,9,5\n8,4,1,3,2,6\n3,7,2,8,6,4"
         
         let matrix = Matrix(input: matrixString)
-        
         XCTAssertNotNil(matrix)
         
         let lowCostAlgo = LowCostFinder()
+        lowCostAlgo.initializeArrays(matrix: (matrix?.inputMatrix)!)
+        let minCost = lowCostAlgo.searchLowCostIn(costs: lowCostAlgo.additionColumn)
         
-        for row in 0...((matrix?.inputMatrix.count)!-1) {
-            
-            lowCostAlgo.additionColumn.append((matrix?.inputMatrix[row][0])!)
-        }
-        
-        let minCost = lowCostAlgo.minimumCost(adjacantRows: [4,0,1], matrixElement: (matrix?.inputMatrix[0][1])!)
-        
-        //This will be inputMatrix[0][1]+inputMatrix[4][0] i.e. 4+3 = 7
-        XCTAssertEqual(7, minCost.gridCostUptoMaximum)
+        XCTAssertEqual(3, minCost.gridCost)
     }
 }

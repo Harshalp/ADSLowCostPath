@@ -11,7 +11,7 @@
 
 import UIKit
 
-class Cost: NSObject {
+class Cost: Comparable {
 
     //Cost of the grid
     var gridCost = 0
@@ -28,9 +28,6 @@ class Cost: NSObject {
     //Holds weather whole path is traversed
     var traversedCompletePath = false
     
-    //Maximum allowed cost. Path traversing should stop if cost exeeds 50.
-    //let maximumCost = 50
-    
     //MARK:- Initialization with cost and row number
     init(cost: Int, gridRow:Int) {
         
@@ -43,5 +40,39 @@ class Cost: NSObject {
         
         self.gridCost = cost
         self.costPath.append(contentsOf: gridRows)        
+    }
+    
+    // Returns a Boolean value indicating whether the value of the first
+    // argument is less than that of the second argument.
+    public static func <(lhs: Cost, rhs: Cost) -> Bool {
+        
+        return lhs.gridCost < rhs.gridCost
+    }
+    
+    // Returns a Boolean value indicating whether the value of the first
+    // argument is less than or equal to that of the second argument.
+    public static func <=(lhs: Cost, rhs: Cost) -> Bool {
+        
+        return lhs.gridCost <= rhs.gridCost
+    }
+    
+    // Returns a Boolean value indicating whether the value of the first
+    // argument is greater than or equal to that of the second argument.
+    public static func >=(lhs: Cost, rhs: Cost) -> Bool {
+        
+        return lhs.gridCost >= rhs.gridCost
+    }
+    
+    // Returns a Boolean value indicating whether the value of the first
+    // argument is greater than that of the second argument.
+    public static func >(lhs: Cost, rhs: Cost) -> Bool {
+        
+        return lhs.gridCost > rhs.gridCost
+    }
+    
+    // Returns a Boolean value indicating whether two values are equal.
+    public static func ==(lhs: Cost, rhs: Cost) -> Bool {
+     
+        return lhs.gridCost == rhs.gridCost
     }
 }

@@ -49,7 +49,7 @@ class ViewController: UIViewController, UITextViewDelegate {
         if let matrix = Matrix(input: inputString) {
         
             let lowCostAlgo = LowCostFinder()
-            let bestCost = lowCostAlgo.findBestCostForMatrix(matrix: matrix.inputMatrix)
+            let bestCost = lowCostAlgo.findBestCostFor(matrix: matrix.inputMatrix)
             
             self.labelPathCost.text = "\(bestCost.gridCostUptoMaximum)"
             
