@@ -48,34 +48,28 @@ class ViewController: UIViewController, UITextViewDelegate {
         let inputString = self.tvMatrix.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         
         do {
-        //if
             if let matrix = try Matrix(input: inputString) {
         
-            let lowCostAlgo = LowCostFinder()
-            let bestCost = lowCostAlgo.findBestCostFor(matrix: matrix.inputMatrix)
-            
-            self.labelPathCost.text = "\(bestCost.gridCostUptoMaximum)"
-            
-            if bestCost.traversedCompletePath {
+                let lowCostAlgo = LowCostFinder()
+                let bestCost = lowCostAlgo.findBestCostFor(matrix: matrix.inputMatrix)
                 
-                self.labelPathSucceeded.text = "Yes"
+                self.labelPathCost.text = "\(bestCost.gridCostUptoMaximum)"
+                
+                if bestCost.traversedCompletePath {
+                    
+                    self.labelPathSucceeded.text = "Yes"
+                }
+                else {
+                    self.labelPathSucceeded.text = "No"
+                }
+                
+                var pathString = String(describing: bestCost.costPathUptoMaximum)
+                pathString = pathString.replacingOccurrences(of: "[", with: "")
+                pathString = pathString.replacingOccurrences(of: "]", with: "")
+                
+                self.labelPathTraversed.text = pathString
             }
-            else {
-                self.labelPathSucceeded.text = "No"
-            }
-            
-            var pathString = String(describing: bestCost.costPathUptoMaximum)
-            pathString = pathString.replacingOccurrences(of: "[", with: "")
-            pathString = pathString.replacingOccurrences(of: "]", with: "")
-            
-            self.labelPathTraversed.text = pathString
-        }
-//        else {
-//            
-//            let alert = UIAlertController(title: "Error", message: "Invalid Matrix", preferredStyle:.alert)
-//            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-//            self.present(alert, animated: true, completion: nil)
-//        }
+
         } catch let error as NSError {
             
             let alert = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle:.alert)
