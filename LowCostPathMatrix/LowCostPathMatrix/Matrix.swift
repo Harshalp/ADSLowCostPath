@@ -20,11 +20,19 @@ class Matrix {
     let maximumCost = 50
     
     //MARK:- Initialization
-    init?(input : String) {
+    init?(input : String) throws {
         
         //Validates blank input
         if input == "" {
-            return nil
+            
+            let userInfo: [NSObject : AnyObject] =
+                [
+                    NSLocalizedDescriptionKey as NSObject :  NSLocalizedString("Invalid Matrix", value: "Please provide input", comment: "") as AnyObject
+            ]
+            let err = NSError(domain: "InvalidMatrix", code: 1, userInfo: userInfo)
+            
+            //return nil
+            throw err
         }
     
         //Calculate number of rows and columns
@@ -44,7 +52,15 @@ class Matrix {
             //Condition to check all the rows contains same number of columns
             if columnArray.count != columns {
                 
-                return nil
+                //return nil
+                
+                let userInfo: [NSObject : AnyObject] =
+                    [
+                        NSLocalizedDescriptionKey as NSObject :  NSLocalizedString("Invalid Matrix", value: "Each row and column must be of same size", comment: "") as AnyObject
+                ]
+                let err = NSError(domain: "InvalidMatrix", code: 2, userInfo: userInfo)
+                
+                throw err
             }
             
             for j in 0..<columns {
@@ -62,7 +78,13 @@ class Matrix {
                 }
                 else {
                     
-                    return nil
+                    let userInfo: [NSObject : AnyObject] =
+                        [
+                            NSLocalizedDescriptionKey as NSObject :  NSLocalizedString("Invalid Matrix", value: "Input matrix must contain only numbers", comment: "") as AnyObject
+                    ]
+                    let err = NSError(domain: "InvalidMatrix", code: 3, userInfo: userInfo)
+                    
+                    throw err
                 }
             }
         }

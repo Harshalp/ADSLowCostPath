@@ -46,7 +46,10 @@ class ViewController: UIViewController, UITextViewDelegate {
         self.tvMatrix.resignFirstResponder()
         
         let inputString = self.tvMatrix.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        if let matrix = Matrix(input: inputString) {
+        
+        do {
+        //if
+            if let matrix = try Matrix(input: inputString) {
         
             let lowCostAlgo = LowCostFinder()
             let bestCost = lowCostAlgo.findBestCostFor(matrix: matrix.inputMatrix)
@@ -67,9 +70,15 @@ class ViewController: UIViewController, UITextViewDelegate {
             
             self.labelPathTraversed.text = pathString
         }
-        else {
+//        else {
+//            
+//            let alert = UIAlertController(title: "Error", message: "Invalid Matrix", preferredStyle:.alert)
+//            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+//            self.present(alert, animated: true, completion: nil)
+//        }
+        } catch let error as NSError {
             
-            let alert = UIAlertController(title: "Error", message: "Invalid Matrix", preferredStyle:.alert)
+            let alert = UIAlertController(title: "Error", message: "\(error.localizedDescription)", preferredStyle:.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }

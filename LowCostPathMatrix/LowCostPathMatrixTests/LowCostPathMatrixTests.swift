@@ -26,15 +26,20 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "3,4,1,2,8,6\n6,1,8,2,7,4\n5,9,3,9,9,5\n8,4,1,3,2,6\n3,7,2,8,6,4"
         
-        let matrix = Matrix(input: matrixString)
-        XCTAssertNotNil(matrix)
+        do {
+            let matrix = try Matrix(input: matrixString)
+            
+            XCTAssertNotNil(matrix)
         
-        let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
+            let lowCostAlgo = LowCostFinder()
+            let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
         
-        XCTAssertTrue(minCost.traversedCompletePath)
-        XCTAssertEqual(16, minCost.gridCostUptoMaximum)
-        XCTAssertEqual([1, 2, 3, 4, 4, 5], minCost.costPathUptoMaximum)
+            XCTAssertTrue(minCost.traversedCompletePath)
+            XCTAssertEqual(16, minCost.gridCostUptoMaximum)
+            XCTAssertEqual([1, 2, 3, 4, 4, 5], minCost.costPathUptoMaximum)
+        } catch {
+        }
+        
     }
     
     //MARK:- Test Case for 1 x 5 Matrix (Single Row)
@@ -42,15 +47,19 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "3,4,1,2,8"
         
-        let matrix = Matrix(input: matrixString)
-        XCTAssertNotNil(matrix)
+        do {
         
-        let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
-        
-        XCTAssertTrue(minCost.traversedCompletePath)
-        XCTAssertEqual(18, minCost.gridCostUptoMaximum)
-        XCTAssertEqual([1, 1, 1, 1, 1], minCost.costPathUptoMaximum)
+            let matrix = try Matrix(input: matrixString)
+            XCTAssertNotNil(matrix)
+            
+            let lowCostAlgo = LowCostFinder()
+            let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
+            
+            XCTAssertTrue(minCost.traversedCompletePath)
+            XCTAssertEqual(18, minCost.gridCostUptoMaximum)
+            XCTAssertEqual([1, 1, 1, 1, 1], minCost.costPathUptoMaximum)
+        } catch {
+        }
     }
     
     //MARK:- Test Case for 5 x 1 Matrix (Single Column)
@@ -58,16 +67,19 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "3\n4\n1\n2\n8"
         
-        let matrix = Matrix(input: matrixString)
-        
-        XCTAssertNotNil(matrix)
-        
-        let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
-        
-        XCTAssertTrue(minCost.traversedCompletePath)
-        XCTAssertEqual(1, minCost.gridCostUptoMaximum)
-        XCTAssertEqual([3], minCost.costPathUptoMaximum)
+        do {
+            let matrix = try Matrix(input: matrixString)
+            
+            XCTAssertNotNil(matrix)
+            
+            let lowCostAlgo = LowCostFinder()
+            let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
+            
+            XCTAssertTrue(minCost.traversedCompletePath)
+            XCTAssertEqual(1, minCost.gridCostUptoMaximum)
+            XCTAssertEqual([3], minCost.costPathUptoMaximum)
+        } catch {
+        }
     }
     
     //MARK:- Test Case for total cost > 50
@@ -75,16 +87,20 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "19,10,19,10,19\n21,23,20,19,12\n20,12,20,11,10"
         
-        let matrix = Matrix(input: matrixString)
+        do {
         
-        XCTAssertNotNil(matrix)
-        
-        let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
-        
-        XCTAssertFalse(minCost.traversedCompletePath)
-        XCTAssertEqual(48, minCost.gridCostUptoMaximum)
-        XCTAssertEqual([1,1,1], minCost.costPathUptoMaximum)
+            let matrix = try Matrix(input: matrixString)
+            
+            XCTAssertNotNil(matrix)
+            
+            let lowCostAlgo = LowCostFinder()
+            let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
+            
+            XCTAssertFalse(minCost.traversedCompletePath)
+            XCTAssertEqual(48, minCost.gridCostUptoMaximum)
+            XCTAssertEqual([1,1,1], minCost.costPathUptoMaximum)
+        }catch {
+        }
     }
     
     //MARK:- Test Case for total cost starting with > 50
@@ -92,15 +108,19 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "69,10,19,10,19\n51,23,20,19,12\n60,12,20,11,10"
         
-        let matrix = Matrix(input: matrixString)
-        XCTAssertNotNil(matrix)
-        
-        let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
-        
-        XCTAssertFalse(minCost.traversedCompletePath)
-        XCTAssertEqual(0, minCost.gridCostUptoMaximum)
-        XCTAssertEqual([], minCost.costPathUptoMaximum)
+        do {
+            
+            let matrix = try Matrix(input: matrixString)
+            XCTAssertNotNil(matrix)
+            
+            let lowCostAlgo = LowCostFinder()
+            let minCost = lowCostAlgo.findBestCostFor(matrix: (matrix?.inputMatrix)!)
+            
+            XCTAssertFalse(minCost.traversedCompletePath)
+            XCTAssertEqual(0, minCost.gridCostUptoMaximum)
+            XCTAssertEqual([], minCost.costPathUptoMaximum)
+        } catch {
+        }
     }
     
     //MARK:- Test Case for Invalid Matrix - One column has more size
@@ -108,9 +128,11 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "3,4,1,2,8,6\n6,1,8,2,7,4\n5,9,3,9,9,5\n8,4,1,3,2,6\n3,7,2,3,6"
         
-        let matrix = Matrix(input: matrixString)
-        
-        XCTAssertNil(matrix)
+        do {
+            let matrix = try Matrix(input: matrixString)
+            XCTAssertNil(matrix)
+        } catch {
+        }
     }
     
     //MARK:- Test Case for Invalid Matrix - Invalid characters entered
@@ -118,9 +140,12 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "3,4,1,2,8,6\n6,1,8,2,7,4\n5,9,a,9,9,5\n8,4,1,3,2,6\n3,7,2,8,6,4"
         
-        let matrix = Matrix(input: matrixString)
+        do {
+            let matrix = try Matrix(input: matrixString)
         
-        XCTAssertNil(matrix)
+            XCTAssertNil(matrix)
+        } catch {
+        }
     }
     
     //MARK:- Test Case for Invalid Matrix - No Input
@@ -128,9 +153,12 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = ""
         
-        let matrix = Matrix(input: matrixString)
+        do {
+            let matrix = try Matrix(input: matrixString)
+            XCTAssertNil(matrix)
+        } catch {
+        }
         
-        XCTAssertNil(matrix)
     }
     
     //MARK:- Test Case for Negative numbers in matrix
@@ -138,16 +166,19 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "6,3,-5,10\n-5,2,4,10\n3,-2,6,10\n6,-1,-2,10"
         
-        let matrix = Matrix(input: matrixString)
+        do {
+            let matrix = try Matrix(input: matrixString)
         
-        XCTAssertNotNil(matrix)
+            XCTAssertNotNil(matrix)
         
-        let lowCostAlgo = LowCostFinder()
-        let minCost = lowCostAlgo.findBestCostFor(matrix:(matrix?.inputMatrix)!)
+            let lowCostAlgo = LowCostFinder()
+            let minCost = lowCostAlgo.findBestCostFor(matrix:(matrix?.inputMatrix)!)
         
-        XCTAssertTrue(minCost.traversedCompletePath)
-        XCTAssertEqual(1, minCost.gridCostUptoMaximum)
-        XCTAssertEqual([2,3,4,1], minCost.costPathUptoMaximum)
+            XCTAssertTrue(minCost.traversedCompletePath)
+            XCTAssertEqual(1, minCost.gridCostUptoMaximum)
+            XCTAssertEqual([2,3,4,1], minCost.costPathUptoMaximum)
+        } catch {
+        }
     }
     
     //MARK:- Test case for adjacent rows
@@ -165,13 +196,16 @@ class LowCostPathMatrixTests: XCTestCase {
         
         let matrixString = "3,4,1,2,8,6\n6,1,8,2,7,4\n5,9,3,9,9,5\n8,4,1,3,2,6\n3,7,2,8,6,4"
         
-        let matrix = Matrix(input: matrixString)
-        XCTAssertNotNil(matrix)
+        do {
+            let matrix = try Matrix(input: matrixString)
+            XCTAssertNotNil(matrix)
         
-        let lowCostAlgo = LowCostFinder()
-        lowCostAlgo.initializeArrays(matrix: (matrix?.inputMatrix)!)
-        let minCost = lowCostAlgo.searchLowCostIn(costs: lowCostAlgo.additionColumn)
+            let lowCostAlgo = LowCostFinder()
+            lowCostAlgo.initializeArrays(matrix: (matrix?.inputMatrix)!)
+            let minCost = lowCostAlgo.searchLowCostIn(costs: lowCostAlgo.additionColumn)
         
-        XCTAssertEqual(3, minCost.gridCost)
+            XCTAssertEqual(3, minCost.gridCost)
+        } catch {
+        }
     }
 }
